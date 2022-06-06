@@ -1,10 +1,10 @@
 # My Project
 
-Tennis est une API simple permettant de retourner les statistiques des joueurs de tennis.
+Tennis est une API simple permettant de retourner les statistiques des joueurs de tennis à partir d'un lien json.
 
 ## Installation
 
-Pour lancer ce projet, il faut utiliser JAVA 11 au moins. 
+C'est un projet JAVA 11 + Spring Boot. 
 Il suffit clonner le projet et lancer un install de l'application, puis lancer en localHost 1011 "ma date de naissance :)"
 
 ## Usage
@@ -25,3 +25,9 @@ Il suffit clonner le projet et lancer un install de l'application, puis lancer e
     - La médiane de la taille des joueur
 ```
 
+## Déploiement
+Projet est déploié sur Herkou 
+Voici le lien de l'application: 
+```java
+https://tenniszaky.herokuapp.com/
+```j
