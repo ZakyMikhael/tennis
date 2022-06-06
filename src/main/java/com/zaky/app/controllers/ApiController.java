@@ -6,8 +6,6 @@ import com.zaky.app.services.PlayersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,17 +20,12 @@ public class ApiController {
 
     @GetMapping("/")
     public String home() {
-        return "Welcome";
+        return "Welcome to Tennis Players App.";
     }
 
     @GetMapping("/players")
     public List<Player> getAllPlayers() {
         return playersService.orderByRank(playersService.getAllPlayers());
-    }
-
-    @PostMapping("/players/add")
-    public List<Player> addPlayer(@RequestBody Player player) {
-        return playersService.addPlayer(getAllPlayers(), player);
     }
 
     @GetMapping("/players/{idPlayer}")

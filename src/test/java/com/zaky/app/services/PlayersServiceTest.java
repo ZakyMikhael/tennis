@@ -3,7 +3,6 @@ package com.zaky.app.services;
 import com.zaky.app.models.Country;
 import com.zaky.app.models.Player;
 import com.zaky.app.models.PlayerData;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,10 +68,12 @@ class PlayersServiceTest {
         Player player1 = new Player();
         PlayerData player1Data = new PlayerData();
         Country player1Country = new Country();
-        player1Country.setCode("GER");
+        player1Country.setCode("SGL");
         player1Data.setRank(8);
         player1Data.setWeight(90.5);
         player1Data.setHeight(190);
+        List<Integer> listLast1 = Arrays.asList(1, 0, 1, 0, 1);
+        player1Data.setLast(listLast1);
         player1.setData(player1Data);
         player1.setCountry(player1Country);
         player1.setFirstname("Mané");
@@ -80,10 +82,12 @@ class PlayersServiceTest {
         Player player2 = new Player();
         PlayerData player2Data = new PlayerData();
         Country player2Country = new Country();
-        player2Country.setCode("GER");
+        player2Country.setCode("EGY");
         player2Data.setRank(5);
         player2Data.setWeight(83000);
         player2Data.setHeight(180);
+        List<Integer> listLast2 = Arrays.asList(1, 1, 1, 1, 1);
+        player2Data.setLast(listLast2);
         player2.setData(player2Data);
         player2.setCountry(player2Country);
         player2.setFirstname("Salah");
@@ -101,13 +105,10 @@ class PlayersServiceTest {
     }
 
     @Test
-    void should_add_new_player() {
+    void should_calcul_ratio() {
         List<Player> players = initPlayers();
-        assertThat(players).hasSize(2);
-        Player player = new Player();
-        player.setFirstname("Fermino");
-        playersService.addPlayer(players, player);
-        assertThat(players).hasSize(3);
+        assertThat(playersService.caculRatio(players).toString())
+                .hasToString("{Le Pays qui a le plus grand ratio de parties gagnées est: EGY=1.0}");
 
     }
 }

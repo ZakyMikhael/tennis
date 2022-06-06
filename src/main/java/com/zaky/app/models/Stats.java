@@ -3,10 +3,12 @@ package com.zaky.app.models;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 @Builder
 public class Stats {
-    private String pays;
+    private Map<String, Double> ratioPays;
     private double imcMoyen;
     private double tailleMediane;
 }

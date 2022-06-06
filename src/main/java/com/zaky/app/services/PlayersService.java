@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,9 +48,30 @@ public class PlayersService {
 
     public Stats getStats(List<Player> players) {
         return Stats.builder()
+                .ratioPays(caculRatio(players))
                 .imcMoyen(moyenImc(players))
                 .tailleMediane(tailleMediane(players))
                 .build();
+    }
+
+    public Map<String, Double> caculRatio(List<Player> players) {
+        double ratio = 0;
+        Map<String, Double> paysRatio = new HashMap<>();
+        String pays = "";
+        for (Player player : players) {
+            List<Integer> partiesData = player.getData().getLast();
+            double average = partiesData.stream()
+                    .mapToDouble(d -> d)
+                    .average()
+                    .orElse(0.0);
+            if (average > ratio) {
+                ratio = average;
+                pays = player.getCountry().getCode();
+            }
+        }
+        paysRatio.put("Le Pays qui a le plus grand ratio de parties gagnées est: " + pays, ratio);
+        return paysRatio;
+
     }
 
     public double moyenImc(List<Player> players) {
@@ -96,12 +119,6 @@ public class PlayersService {
         } catch (IOException e) {
             log.error("Erreur lors de la récupération des données");
         }
-        return players;
-    }
-
-
-    public List<Player> addPlayer(List<Player> players, Player player) {
-        players.add(player);
         return players;
     }
 }
