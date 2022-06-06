@@ -24,7 +24,7 @@ class ImcServiceTest {
 
     @Test
     void should_get_IMC_Interpretation() {
-        Assertions.assertThat(ImcService.getIMCInterpretation(0)).isEqualTo("Normal");
+        Assertions.assertThat(ImcService.getIMCInterpretation(0)).isEqualTo("Underweight");
         Assertions.assertThat(ImcService.getIMCInterpretation(19)).isEqualTo("Normal");
         Assertions.assertThat(ImcService.getIMCInterpretation(25)).isEqualTo("Overweight");
     }

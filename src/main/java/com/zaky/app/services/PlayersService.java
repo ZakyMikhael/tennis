@@ -1,52 +1,30 @@
 package com.zaky.app.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zaky.app.models.Country;
 import com.zaky.app.models.Player;
-import com.zaky.app.models.PlayerData;
+import com.zaky.app.models.Root;
 import com.zaky.app.models.Stats;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PlayersService {
 
     List<Player> localPlayers = new ArrayList<>();
+    public static final String DATA_URL = "https://data.latelier.co/training/tennis_stats/headtohead.json";
 
     @PostConstruct
     public void initPlayers() {
-        Player player1 = new Player();
-        PlayerData player1Data = new PlayerData();
-        Country player1Country = new Country();
-        player1Country.setCode("GER");
-        player1Data.setRank(8);
-        player1Data.setWeight(90.5);
-        player1Data.setHeight(190);
-        player1.setData(player1Data);
-        player1.setCountry(player1Country);
-        player1.setFirstname("Mané");
-        player1.setId("2");
-
-        Player player2 = new Player();
-        PlayerData player2Data = new PlayerData();
-        Country player2Country = new Country();
-        player2Country.setCode("GER");
-        player2Data.setRank(5);
-        player2Data.setWeight(83000);
-        player2Data.setHeight(180);
-        player2.setData(player2Data);
-        player2.setCountry(player2Country);
-        player2.setFirstname("Salah");
-        player2.setId("5");
-        localPlayers.add(player1);
-        localPlayers.add(player2);
+        localPlayers = getPlayersFromJsonLink(DATA_URL);
     }
 
     public List<Player> getAllPlayers() {
@@ -108,17 +86,19 @@ public class PlayersService {
                 .average().orElse(Double.NaN);
     }
 
-    public String json() {
-        try (java.io.InputStream is = new java.net.URL("https://data.latelier.co/training/tennis_stats/headtohead.json").openStream()) {
-            String contents = new String(is.readAllBytes());
-            ObjectMapper mapper = new ObjectMapper();
-            localPlayers = Arrays.asList(mapper.readValue(contents, Player[].class));
 
-            return localPlayers.toString();
+    public List<Player> getPlayersFromJsonLink(String url) {
+        List<Player> players = new ArrayList<>();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Root root = mapper.readValue(new URL(url), Root.class);
+            players = root.getPlayers();
         } catch (IOException e) {
-            return "Error";
+            log.error("Erreur lors de la récupération des données");
         }
+        return players;
     }
+
 
     public List<Player> addPlayer(List<Player> players, Player player) {
         players.add(player);

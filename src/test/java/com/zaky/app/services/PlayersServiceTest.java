@@ -13,6 +13,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {PlayersService.class})
 class PlayersServiceTest {
@@ -21,45 +23,45 @@ class PlayersServiceTest {
 
     @Test
     void shoud_read_json_data() {
-        Assertions.assertThat(playersService.getAllPlayers()).isNotEmpty();
+        assertThat(playersService.getAllPlayers()).isNotEmpty();
     }
 
     @Test
     void should_order_players_by_rank() {
         List<Player> players = initPlayers();
-        Assertions.assertThat(playersService.orderByRank(players)).isNotEmpty();
-        Assertions.assertThat(playersService.orderByRank(players).get(0).getFirstname()).isEqualTo("Salah");
+        assertThat(playersService.orderByRank(players)).isNotEmpty();
+        assertThat(playersService.orderByRank(players).get(0).getFirstname()).isEqualTo("Salah");
     }
 
     @Test
     void should_find_with_id() {
         List<Player> players = initPlayers();
-        Assertions.assertThat(playersService.getPlayerById(players, "")).isNull();
-        Assertions.assertThat(playersService.getPlayerById(players, "1")).isNull();
-        Assertions.assertThat(playersService.getPlayerById(players, null)).isNull();
-        Assertions.assertThat(playersService.getPlayerById(players, "5").getFirstname()).isEqualTo("Salah");
-        Assertions.assertThat(playersService.getPlayerById(players, "2").getFirstname()).isEqualTo("Mané");
+        assertThat(playersService.getPlayerById(players, "")).isNull();
+        assertThat(playersService.getPlayerById(players, "1")).isNull();
+        assertThat(playersService.getPlayerById(players, null)).isNull();
+        assertThat(playersService.getPlayerById(players, "5").getFirstname()).isEqualTo("Salah");
+        assertThat(playersService.getPlayerById(players, "2").getFirstname()).isEqualTo("Mané");
     }
 
     @Test
     void should_calcul_imc_moyen() {
         List<Player> players = initPlayers();
-        Assertions.assertThat(playersService.moyenImc(players)).isNotZero();
-        Assertions.assertThat(playersService.moyenImc(players)).isEqualTo(25.5);
+        assertThat(playersService.moyenImc(players)).isNotZero();
+        assertThat(playersService.moyenImc(players)).isEqualTo(25.5);
 
         // Test Stream méthode
-        Assertions.assertThat(playersService.moyenImcWithStream(players)).isNotZero();
-        Assertions.assertThat(playersService.moyenImcWithStream(players)).isEqualTo(25.5);
+        assertThat(playersService.moyenImcWithStream(players)).isNotZero();
+        assertThat(playersService.moyenImcWithStream(players)).isEqualTo(25.5);
     }
 
     @Test
     void should_calcul_taille_mediane() {
         List<Player> players = initPlayers();
-        Assertions.assertThat(playersService.tailleMediane(players)).isNotZero();
-        Assertions.assertThat(playersService.tailleMediane(players)).isEqualTo(185);
+        assertThat(playersService.tailleMediane(players)).isNotZero();
+        assertThat(playersService.tailleMediane(players)).isEqualTo(185);
         // Test Stream méthode
-        Assertions.assertThat(playersService.tailleMedianeavecStream(players)).isNotZero();
-        Assertions.assertThat(playersService.tailleMedianeavecStream(players)).isEqualTo(185);
+        assertThat(playersService.tailleMedianeavecStream(players)).isNotZero();
+        assertThat(playersService.tailleMedianeavecStream(players)).isEqualTo(185);
     }
 
     private List<Player> initPlayers() {
@@ -93,18 +95,19 @@ class PlayersServiceTest {
     }
 
     @Test
-    void test_json() {
-        Assertions.assertThat(playersService.json()).isEqualTo("test");
+    void test_get_json_from_url() {
+        assertThat(playersService.getPlayersFromJsonLink(PlayersService.DATA_URL))
+                .hasSize(5);
     }
 
     @Test
     void should_add_new_player() {
         List<Player> players = initPlayers();
-        Assertions.assertThat(players).hasSize(2);
+        assertThat(players).hasSize(2);
         Player player = new Player();
         player.setFirstname("Fermino");
         playersService.addPlayer(players, player);
-        Assertions.assertThat(players).hasSize(3);
+        assertThat(players).hasSize(3);
 
     }
 }

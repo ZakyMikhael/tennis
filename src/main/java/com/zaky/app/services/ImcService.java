@@ -1,12 +1,12 @@
 package com.zaky.app.services;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Service
 public class ImcService {
-    private ImcService() {
-        throw new IllegalStateException("Utility class");
-    }
 
     public static double getIMC(double weight, double height) {
         double poids = weight > 1000 ? weight / 1000 : weight;
