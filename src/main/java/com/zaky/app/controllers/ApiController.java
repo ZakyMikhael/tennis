@@ -20,6 +20,11 @@ public class ApiController {
     @Autowired
     PlayersService playersService;
 
+    @GetMapping("/")
+    public String home() {
+        return "Welcome";
+    }
+
     @GetMapping("/players")
     public List<Player> getAllPlayers() {
         return playersService.orderByRank(playersService.getAllPlayers());
